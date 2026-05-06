@@ -1,0 +1,22 @@
+name: DevOps CI Pipeline
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Build Docker Image
+      run: docker build -t fusion-backend ./backend
+
+    - name: Run Container (Test)
+      run: |
+        docker run -d -p 8000:8000 fusion-backend
+        sleep 5
+        curl http://localhost:8000
